@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Token Preview · 设计令牌实时预览</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans, system-ui, "Segoe UI", "Microsoft YaHei", sans-serif);
+      line-height: var(--leading-normal, 1.6);
+      color: var(--color-text, #0f172a);
+      background: var(--color-bg-page, #f7f8fb);
+    }
+    .page {
+      width: 1180px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    .hero, .panel, .preview-card, .sample-table {
+      border: 1px solid var(--color-border, #e2e8f0);
+      border-radius: var(--radius-lg, 16px);
+      background: var(--color-bg, #ffffff);
+      box-shadow: var(--shadow-sm, 0 6px 18px rgba(15, 23, 42, 0.08));
+    }
+    .hero { padding: 28px; margin-bottom: 18px; }
+    .eyebrow { color: var(--color-brand, #4f46e5); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 8px 0 10px; font-size: var(--font-3xl, 36px); line-height: var(--leading-tight, 1.2); }
+    p { margin: 0; color: var(--color-text-secondary, #475569); }
+    .layout { display: grid; grid-template-columns: 330px 1fr; gap: 18px; align-items: start; }
+    .panel { padding: 18px; position: sticky; top: 16px; }
+    .panel h2, .preview h2 { margin: 0 0 14px; font-size: var(--font-lg, 20px); line-height: var(--leading-tight, 1.2); }
+    .control { display: grid; gap: 8px; padding: 14px 0; border-top: 1px solid var(--color-border, #e2e8f0); }
+    .control:first-of-type { border-top: 0; }
+    .control label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 700; }
+    .control code { color: var(--color-brand, #4f46e5); font-weight: 700; }
+    input[type="range"] { width: 100%; accent-color: var(--color-brand, #4f46e5); }
+    input[type="color"] { width: 100%; height: 38px; border: 1px solid var(--color-border, #e2e8f0); border-radius: var(--radius-md, 10px); background: transparent; }
+    .actions { display: flex; gap: 10px; margin-top: 14px; }
+    button {
+      border: 1px solid transparent;
+      border-radius: var(--radius-md, 10px);
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary { color: #fff; background: var(--color-brand, #4f46e5); }
+    .secondary { color: var(--color-text, #0f172a); background: var(--color-bg-subtle, #f1f5f9); border-color: var(--color-border, #e2e8f0); }
+    .preview { display: grid; gap: 18px; }
+    .preview-card { padding: 22px; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .badge { display: inline-flex; align-items: center; border-radius: var(--radius-full, 999px); padding: 4px 10px; color: var(--color-brand, #4f46e5); background: var(--color-brand-soft, #eef2ff); font-size: 12px; font-weight: 700; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .field { display: grid; gap: 6px; }
+    .field span { color: var(--color-text-muted, #64748b); font-size: 13px; }
+    .input { border: 1px solid var(--color-border, #e2e8f0); border-radius: var(--radius-md, 10px); padding: 11px 12px; background: var(--color-bg, #fff); }
+    .sample-table { overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 13px 16px; text-align: left; border-bottom: 1px solid var(--color-border, #e2e8f0); }
+    th { color: var(--color-text-muted, #64748b); background: var(--color-bg-subtle, #f1f5f9); font-size: 13px; }
+    tr:last-child td { border-bottom: 0; }
+    .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .swatch { min-height: 74px; border-radius: var(--radius-md, 10px); padding: 10px; color: #fff; font-size: 12px; font-weight: 700; }
+    pre { margin: 0; padding: 14px; overflow: auto; color: #e2e8f0; background: #0f172a; border-radius: var(--radius-md, 10px); font-size: 12px; line-height: 1.55; }
+    @media (max-width: 960px) {
+      .page { width: auto; padding: 18px; }
+      .layout, .form-grid { grid-template-columns: 1fr; }
+      .panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Design Token Preview</div>
+      <h1>令牌实时预览</h1>
+      <p>本页直接引用同目录的 <code>tokens.css</code>。调整主色、圆角、行高后，右侧组件会实时变化，用于阶段 2 人工确认。</p>
+    </section>
+
+    <div class="layout">
+      <aside class="panel">
+        <h2>实时调参</h2>
+        <div class="control">
+          <label for="brand">主色 <code id="brandText"></code></label>
+          <input id="brand" type="color" data-token="--color-brand" value="#4f46e5" />
+        </div>
+        <div class="control">
+          <label for="radiusMd">中圆角 <code id="radiusMdText"></code></label>
+          <input id="radiusMd" type="range" min="0" max="28" step="1" data-token="--radius-md" data-unit="px" value="10" />
+        </div>
+        <div class="control">
+          <label for="radiusLg">大圆角 <code id="radiusLgText"></code></label>
+          <input id="radiusLg" type="range" min="0" max="36" step="1" data-token="--radius-lg" data-unit="px" value="16" />
+        </div>
+        <div class="control">
+          <label for="leading">正文行高 <code id="leadingText"></code></label>
+          <input id="leading" type="range" min="1.2" max="2.1" step="0.05" data-token="--leading-normal" value="1.6" />
+        </div>
+        <div class="control">
+          <label for="fontBase">基础字号 <code id="fontBaseText"></code></label>
+          <input id="fontBase" type="range" min="12" max="18" step="1" data-token="--font-base" data-unit="px" value="14" />
+        </div>
+        <div class="actions">
+          <button class="primary" type="button" id="copyCss">复制覆盖片段</button>
+          <button class="secondary" type="button" id="reset">重置</button>
+        </div>
+      </aside>
+
+      <section class="preview">
+        <article class="preview-card">
+          <div class="toolbar">
+            <div>
+              <span class="badge">选中态 / 品牌色</span>
+              <h2 style="margin-top:10px">预览卡片标题</h2>
+              <p>这是一段用于观察行高、字号和文字灰度的长文案。真实项目里请放入最长名称、最长路径、最长备注，避免理想文案下的虚假通过。</p>
+            </div>
+            <button class="primary" type="button">主按钮</button>
+          </div>
+          <div class="form-grid">
+            <label class="field"><span>输入框</span><div class="input">示例文本 / Placeholder</div></label>
+            <label class="field"><span>选择项</span><div class="input">已选择：默认分类</div></label>
+          </div>
+        </article>
+
+        <div class="sample-table">
+          <table>
+            <thead><tr><th>状态</th><th>说明</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge">正常</span></td><td>用于观察表格密度与行高。</td><td><button class="secondary" type="button">查看</button></td></tr>
+              <tr><td><span class="badge">选中</span></td><td>用于确认品牌浅底和边框是否足够清晰。</td><td><button class="secondary" type="button">编辑</button></td></tr>
+              <tr><td><span class="badge">长文本</span></td><td>这是刻意放长的内容，用来观察在不同字号和行高下是否仍然舒适。</td><td><button class="secondary" type="button">处理</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <article class="preview-card">
+          <h2>主色派生观察</h2>
+          <div class="swatches">
+            <div class="swatch" style="background:var(--color-brand,#4f46e5)">--color-brand</div>
+            <div class="swatch" style="background:var(--color-success,#047857)">--color-success</div>
+            <div class="swatch" style="background:var(--color-warning,#b45309)">--color-warning</div>
+            <div class="swatch" style="background:var(--color-danger,#b91c1c)">--color-danger</div>
+          </div>
+        </article>
+
+        <article class="preview-card">
+          <h2>当前覆盖片段</h2>
+          <pre id="cssOutput"></pre>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const controls = Array.from(document.querySelectorAll("[data-token]"));
+    const defaults = new Map(controls.map((el) => [el.id, el.value]));
+    const textMap = {
+      brand: "brandText",
+      radiusMd: "radiusMdText",
+      radiusLg: "radiusLgText",
+      leading: "leadingText",
+      fontBase: "fontBaseText"
+    };
+    function valueOf(el) {
+      return `${el.value}${el.dataset.unit || ""}`;
+    }
+    function sync() {
+      controls.forEach((el) => {
+        document.documentElement.style.setProperty(el.dataset.token, valueOf(el));
+        document.getElementById(textMap[el.id]).textContent = valueOf(el);
+      });
+      document.getElementById("cssOutput").textContent = `:root {\n${controls.map((el) => `  ${el.dataset.token}: ${valueOf(el)};`).join("\n")}\n}`;
+    }
+    controls.forEach((el) => el.addEventListener("input", sync));
+    document.getElementById("reset").addEventListener("click", () => {
+      controls.forEach((el) => { el.value = defaults.get(el.id); });
+      sync();
+    });
+    document.getElementById("copyCss").addEventListener("click", async () => {
+      const btn = document.getElementById("copyCss");
+      await navigator.clipboard.writeText(document.getElementById("cssOutput").textContent);
+      btn.textContent = "已复制";
+      setTimeout(() => { btn.textContent = "复制覆盖片段"; }, 1200);
+    });
+    sync();
+  </script>
+</body>
+</html>

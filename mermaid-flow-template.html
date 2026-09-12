@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mermaid Flow · 独立流程图文档</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: #0f172a;
+      background: #f7f8fb;
+    }
+    .page { width: 1180px; margin: 0 auto; padding: 32px; }
+    .card { border: 1px solid #e2e8f0; border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(15, 23, 42, .08); }
+    header.card { padding: 26px 28px; margin-bottom: 18px; }
+    .eyebrow { color: #4f46e5; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 8px 0 10px; font-size: 32px; line-height: 1.18; }
+    p { margin: 0; color: #475569; line-height: 1.7; }
+    .diagram { padding: 24px; overflow-x: auto; }
+    .diagram + .diagram { margin-top: 18px; }
+    .diagram h2 { margin: 0 0 14px; font-size: 20px; }
+    .mermaid { min-width: 720px; display: flex; justify-content: center; }
+    details { margin-top: 18px; }
+    summary { cursor: pointer; color: #475569; font-weight: 700; }
+    pre { padding: 16px; overflow: auto; color: #e2e8f0; background: #0f172a; border-radius: 12px; line-height: 1.6; }
+    .fallback { display: none; padding: 18px; color: #475569; }
+    .failed .fallback { display: block; }
+    .failed .mermaid { display: none; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="card">
+      <div class="eyebrow">Mermaid Flow</div>
+      <h1>独立流程图文档</h1>
+      <p>本文件是 Mermaid 流程图的独立 HTML 版本。语言版设计文档只保留结论与链接，流程图源码与可视化以本文件为准。阶段 5 可按业务上下文在一页放多个强相关流程图。</p>
+    </header>
+
+    <section class="card diagram">
+      <h2>主流程</h2>
+      <pre class="mermaid">flowchart LR
+  A[开始] --> B[页面/状态/动作]
+  B --> C{需要人工确认?}
+  C -- 是 --> D[停下来等人确认]
+  C -- 否 --> E[进入下一步]
+  D --> E</pre>
+      <div class="fallback">Mermaid 未加载成功。请检查网络，或把 Mermaid 浏览器版脚本放到同目录并调整脚本地址。</div>
+      <details>
+        <summary>查看 Mermaid 源码</summary>
+        <pre class="source-copy"></pre>
+      </details>
+    </section>
+
+    <section class="card diagram">
+      <h2>可选：相关子流程</h2>
+      <pre class="mermaid">flowchart TB
+  S[触发条件] --> T[处理步骤]
+  T --> U[状态更新]
+  U --> V[回到主流程]</pre>
+      <div class="fallback">Mermaid 未加载成功。请检查网络，或把 Mermaid 浏览器版脚本放到同目录并调整脚本地址。</div>
+      <details>
+        <summary>查看 Mermaid 源码</summary>
+        <pre class="source-copy"></pre>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const diagrams = Array.from(document.querySelectorAll(".diagram"));
+    diagrams.forEach((box) => {
+      box.querySelector(".source-copy").textContent = box.querySelector(".mermaid").textContent;
+    });
+    const sources = ["mermaid.min.js", "https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.min.js"];
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+        setTimeout(reject, 8000);
+      });
+    }
+    (async () => {
+      for (const src of sources) {
+        try {
+          await loadScript(src);
+          mermaid.initialize({ startOnLoad: false, theme: "base" });
+          await mermaid.run({ nodes: diagrams.map((box) => box.querySelector(".mermaid")) });
+          return;
+        } catch (_) { /* 换下一个来源 */ }
+      }
+      diagrams.forEach((box) => box.classList.add("failed"));
+    })();
+  </script>
+</body>
+</html>

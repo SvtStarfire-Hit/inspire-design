@@ -1,0 +1,98 @@
+/* ============================================================================
+   InspireDesign 页面端 · 设计令牌（唯一取值来源）
+   ----------------------------------------------------------------------------
+   自举：页面端按方法论自己的要求产出 ——
+     1. 令牌（本文件）：颜色 / 圆角 / 间距 / 字号 / 尺寸基准，名字描述用途
+     2. 组件（app.css）：只引用令牌，不写死值
+     3. 页面（index.html）：只引用令牌与组件
+   后续任何文件不得出现魔法数字与手写色值。
+   ========================================================================== */
+
+:root {
+  /* ---- 色彩 · 品牌（灵感的靛紫） ---- */
+  --color-brand: #4f46e5;            /* 主色：链接、主按钮、强调 */
+  --color-brand-strong: #4338ca;     /* 按下 / 深色场景 */
+  --color-brand-soft: #eef2ff;       /* 品牌浅底：选中态、软卡片 */
+  --color-brand-border: #c7d2fe;     /* 品牌浅底上的描边 */
+
+  /* ---- 色彩 · 中性（页面骨架） ---- */
+  --color-text: #0f172a;             /* 正文 */
+  --color-text-secondary: #475569;   /* 次要文字 */
+  --color-text-muted: #64748b;       /* 辅助说明 */
+  --color-text-faint: #94a3b8;       /* 最弱：占位、水印 */
+  --color-text-invert: #e2e8f0;      /* 深底上的文字 */
+  --color-bg: #ffffff;               /* 卡片底面 */
+  --color-bg-page: #f7f8fb;          /* 页面底 */
+  --color-bg-subtle: #f1f5f9;        /* 分组底 / 行内代码底 */
+  --color-bg-code: #0f172a;          /* 代码块底（深色） */
+  --color-border: #e2e8f0;           /* 常规描边 */
+  --color-border-strong: #cbd5e1;    /* 悬停描边 / 强调分隔 */
+
+  /* ---- 色彩 · 语义状态（浅底 + 描边成套使用） ---- */
+  --color-success: #047857;
+  --color-success-soft: #ecfdf5;
+  --color-success-border: #a7f3d0;
+  --color-warning: #b45309;
+  --color-warning-soft: #fffbeb;
+  --color-warning-border: #fde68a;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-info: #0369a1;
+  --color-info-soft: #f0f9ff;
+  --color-info-border: #bae6fd;
+
+  /* ---- 圆角 ---- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  /* ---- 间距（4 的倍数体系） ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 56px;
+  --space-10: 80px;
+
+  /* ---- 字号 / 行高 ---- */
+  --font-xs: 12px;
+  --font-sm: 13px;
+  --font-base: 14px;
+  --font-md: 16px;
+  --font-lg: 19px;
+  --font-xl: 24px;
+  --font-2xl: 32px;
+  --font-3xl: 40px;
+  --leading-tight: 1.3;
+  --leading-normal: 1.65;
+  --leading-loose: 1.85;
+
+  /* ---- 字体族 ---- */
+  --font-sans: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* ---- 阴影（克制：只用于抬升层级） ---- */
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 0.07), 0 1px 2px rgb(15 23 42 / 0.05);
+  --shadow-md: 0 6px 16px -4px rgb(15 23 42 / 0.1), 0 2px 6px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 16px 40px -12px rgb(15 23 42 / 0.18);
+
+  /* ---- 布局基准 ---- */
+  --layout-nav-height: 60px;
+  --layout-max: 1160px;              /* 常规内容最大宽度 */
+  --layout-narrow: 900px;            /* 阶段详情的阅读宽度 */
+  --layout-page-pad: 40px;
+
+  /* ---- 动效 ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+}

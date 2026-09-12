@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InspireDesign · 从灵感到 UI 的方法论</title>
+  <meta name="description" content="把「从灵感到 UI」的设计方法论编码为可被人和 AI 共同消费的知识资产：9 阶段流程、可复制的提示词模板、声明式的环境要求。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='19' font-size='19'>✦</text></svg>" />
+  <link rel="stylesheet" href="assets/tokens.css" />
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+
+  <!-- 图标集（内联 SVG sprite：复制现成图标形状，不自己画） -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-logo" viewBox="0 0 24 24">
+      <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z" />
+      <path d="M18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7Z" />
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="M20 6 9 17l-5-5" />
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+      <path d="M12 4 21.5 20h-19Z" />
+      <path d="M12 10v4" />
+      <path d="M12 17.2v.1" />
+    </symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24">
+      <path d="m9 6 6 6-6 6" />
+    </symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24">
+      <path d="m15 6-6 6 6 6" />
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path d="M4 12h16" />
+      <path d="m14 6 6 6-6 6" />
+    </symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24">
+      <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+    </symbol>
+    <symbol id="i-file" viewBox="0 0 24 24">
+      <path d="M6 3h8l4 4v14H6Z" />
+      <path d="M14 3v4h4" />
+    </symbol>
+    <symbol id="i-target" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 12h.01" />
+    </symbol>
+    <symbol id="i-package" viewBox="0 0 24 24">
+      <path d="M21 8 12 3 3 8v8l9 5 9-5Z" />
+      <path d="m3.3 8 8.7 5 8.7-5" />
+      <path d="M12 21v-8" />
+    </symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24">
+      <path d="M5 21V4" />
+      <path d="M5 4h12l-2 4 2 4H5" />
+    </symbol>
+    <symbol id="i-steps" viewBox="0 0 24 24">
+      <path d="M4 5h10M4 12h14M4 19h7" />
+      <path d="m18 16 2 2-2 2" opacity="0" />
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 3l7 3v5c0 4.4-2.9 7.9-7 10-4.1-2.1-7-5.6-7-10V6Z" />
+      <path d="M12 8.5v3.5" />
+      <path d="M12 15.2v.1" />
+    </symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24">
+      <path d="M9 14 4 9l5-5" />
+      <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H8" />
+    </symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24">
+      <path d="m5 7 5 5-5 5" />
+      <path d="M13 19h6" />
+    </symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" />
+      <path d="m15.5 8.5-2.3 5.7-5.7 2.3 2.3-5.7Z" />
+    </symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24">
+      <path d="M12 3 3 8l9 5 9-5Z" />
+      <path d="m4.5 12.5-1.5.8 9 5 9-5-1.5-.8" />
+    </symbol>
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M12 6c-1.5-1.5-3.5-2-6-2v14c2.5 0 4.5.5 6 2 1.5-1.5 3.5-2 6-2V4c-2.5 0-4.5.5-6 2Z" />
+      <path d="M12 6v14" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5" />
+      <path d="M12 8v.1" />
+    </symbol>
+    <symbol id="i-user-check" viewBox="0 0 24 24">
+      <circle cx="9.5" cy="8" r="3.5" />
+      <path d="M3.5 20c0-3.1 2.7-5.5 6-5.5 1 0 2 .2 2.8.6" />
+      <path d="m15 18 2 2 4-4.5" />
+    </symbol>
+    <symbol id="i-play" viewBox="0 0 24 24">
+      <path d="M8 5.5v13l11-6.5Z" />
+    </symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24">
+      <rect x="3" y="4.5" width="18" height="12.5" rx="2" />
+      <path d="M9 21h6" />
+      <path d="M12 17v4" />
+    </symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24">
+      <rect x="4.5" y="8" width="15" height="11" rx="2.5" />
+      <path d="M12 4.5V8" />
+      <path d="M12 3.5v.1" />
+      <path d="M9.5 12.5v.1" />
+      <path d="M14.5 12.5v.1" />
+      <path d="M2.5 12v3M21.5 12v3" />
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="M12 4v4M12 16v4M4 12h4M16 12h4" />
+      <path d="m6.3 6.3 2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8" />
+    </symbol>
+  </svg>
+
+  <!-- 顶栏 -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#/">
+        <svg class="icon" aria-hidden="true"><use href="#i-logo" /></svg>
+        <span>InspireDesign</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a class="nav-link" data-nav="home" href="#/">首页</a>
+        <a class="nav-link" data-nav="overview" href="#/overview">流程全景</a>
+        <a class="nav-link" data-nav="toolkit" href="#/toolkit">工具链</a>
+        <a class="nav-link" data-nav="about" href="#/about">关于</a>
+      </nav>
+      <span class="badge badge-brand nav-mode" title="当前为 WPF 启发流（首发模式）">
+        <svg class="icon" aria-hidden="true"><use href="#i-monitor" /></svg>WPF 启发流
+      </span>
+    </div>
+  </header>
+
+  <!-- 视图挂载点（由 app.js 按 hash 路由渲染） -->
+  <main id="view"></main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-brand">
+        <svg class="icon" aria-hidden="true"><use href="#i-logo" /></svg>
+        InspireDesign · 把「从灵感到 UI」的方法论编码为可消费的知识资产
+      </span>
+      <span class="footer-docs">
+        <a href="../README.md">README</a>
+        <a href="../WPF-README.md">WPF 工程流程</a>
+        <a href="../docs/01-核心理念.md">核心理念</a>
+        <a href="../docs/02-流程模型.md">流程模型</a>
+        <a href="../docs/03-数据契约.md">数据契约</a>
+        <a href="../docs/04-MCP服务设计.md">MCP 服务</a>
+      </span>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
