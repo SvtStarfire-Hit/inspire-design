@@ -496,7 +496,7 @@ function renderAbout() {
       <h1 class="page-title">关于 InspireDesign</h1>
       <p class="page-desc">把「从灵感到 UI」的方法论编码成可被人和 AI 共同消费的知识资产。项目仓库：
       <a href="https://github.com/SvtStarfire-Hit/inspire-design" target="_blank" rel="noopener">github.com/SvtStarfire-Hit/inspire-design</a>。
-      以下是核心理念的精简版，完整论证见 <a href="../docs/01-核心理念.md">docs/01-核心理念.md</a>。</p>
+      以下是核心理念的精简版，完整论证见 <a href="../docs/01-核心理念.md" target="_blank" rel="noopener">docs/01-核心理念.md</a>。</p>
     </div>
     <div class="duo-grid">
       ${ideas
