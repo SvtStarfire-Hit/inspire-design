@@ -212,12 +212,10 @@ function renderHome() {
 }
 
 /* ---------- 视图：流程全景 ---------- */
-/* Mermaid 加载策略：本地 vendor 优先（自包含、离线可用）→ CDN 兜底 → 文字降级
-   注意：动态 script 的相对路径基于页面 URL（非模块 URL）解析，故写 "vendor/..." */
-const MERMAID_SOURCES = [
-  "vendor/mermaid.min.js",
-  "https://cdn.jsdelivr.net/npm/mermaid@12/dist/mermaid.min.js",
-];
+/* Mermaid 加载策略：仅本地 vendor（自包含、离线可用）→ 加载失败则文字降级
+   注意：动态 script 的相对路径基于页面 URL（非模块 URL）解析，故写 "vendor/..."
+   不保留境外 CDN 兜底：本站不允许任何第三方外联（备案要求） */
+const MERMAID_SOURCES = ["vendor/mermaid.min.js"];
 let mermaidLoading = null;
 
 function loadScript(src, timeoutMs = 8000) {
@@ -495,7 +493,7 @@ function renderAbout() {
     <div class="page-head">
       <h1 class="page-title">关于 InspireDesign</h1>
       <p class="page-desc">把「从灵感到 UI」的方法论编码成可被人和 AI 共同消费的知识资产。项目仓库：
-      <a href="https://github.com/SvtStarfire-Hit/inspire-design" target="_blank" rel="noopener">github.com/SvtStarfire-Hit/inspire-design</a>。
+      github.com/SvtStarfire-Hit/inspire-design。
       以下是核心理念的精简版，完整论证见 <a href="../docs/01-核心理念.md">docs/01-核心理念.md</a>。</p>
     </div>
     <div class="duo-grid">

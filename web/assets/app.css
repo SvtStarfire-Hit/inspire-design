@@ -73,6 +73,8 @@ code, pre { font-family: var(--font-mono); }
 .nav-link:active { background: var(--color-border); }
 .nav-link.active { background: var(--color-brand-soft); color: var(--color-brand); font-weight: 600; }
 .nav-mode { flex: none; }
+/* 返回主站：不参与压缩/换行，窄屏下保持可点 */
+.nav-back { flex: none; white-space: nowrap; }
 
 /* ---------- 布局容器 ---------- */
 .container {
@@ -441,4 +443,6 @@ code, pre { font-family: var(--font-mono); }
   .nav-inner { gap: var(--space-3); }
   .nav-links { gap: 0; overflow-x: auto; }
   .nav-link { padding: var(--space-2); font-size: var(--font-xs); }
+  /* 窄屏收起模式徽章（仅状态提示、非入口），把横向空间让给导航与「返回主站」 */
+  .nav-mode { display: none; }
 }
